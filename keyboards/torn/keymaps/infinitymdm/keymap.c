@@ -69,16 +69,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESC,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
     KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_PMNS,
     KC_UNDS, _______, _______, _______, _______, _______,   _______, _______, KC_COMM, KC_DOT,  KC_SLSH, KC_PPLS,
-                      _______,  _______, _______, _______,   _______, _______, _______, KC_MUTE
+                      _______, _______, _______, _______,   _______, _______, _______, KC_MUTE
 ),
 
 /* Raise
  * ,-----------------------------------------.    ,-----------------------------------------.
  * |      |  F1  |  F2  |  F3  |  F4  |  F5  |    |      |   &  |   *  |   (  |   )  |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- * |      |  F6  |  F7  |  F8  |  F9  |  F10 |    | Home | Left | Down | Right| End  | PgUp |
+ * |      |  F6  |  F7  |  F8  |  F9  |  F10 |    |      | Left | Down | Up   |Right |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- * |      |  F11 |  F12 |      |      |      |    |      |      |      |      |      | PgDn |
+ * |      |  F11 |  F12 |      |      |      |    |      | Home | PgDn | PgUp | End  |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  *               | ____ | Ctrl | Bksp | Del  |    |Enter |Space | Alt  | ____ |
  *               |      |      |Shift |Raise |    | Gui  |Lower |      |      |
@@ -114,9 +114,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 const uint16_t PROGMEM encoder_keymaps[][2][2] = {
     /* LAYER         LEFT CW       LEFT CCW           RIGHT CW       RIGHT CCW */
-    [_QWERTY] =  { { C(KC_TAB),    C(S(KC_TAB)) },  { C(KC_Y),       C(KC_Z) } },
+    [_QWERTY] =  { { S(KC_RIGHT),  S(KC_LEFT)  },  { C(KC_Y),       C(KC_Z) } },
     [_LOWER]  =  { { A(KC_TAB),    A(S(KC_TAB)) },  { KC_VOLU,       KC_VOLD } },
     [_RAISE]  =  { { C(A(KC_RGHT)),C(A(KC_LEFT))},  { KC_MNXT,       KC_MPRV } },
-    [_ADJUST] =  { { _______,      _______ },       { _______,       _______ } },
+    [_ADJUST] =  { { _______,      _______      },  { _______,       _______ } },
 };
 // clang-format on
