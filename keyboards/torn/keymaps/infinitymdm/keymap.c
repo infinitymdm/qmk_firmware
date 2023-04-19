@@ -29,7 +29,7 @@ enum torn_layers { _QWERTY, _LOWER, _RAISE, _ADJUST };
     LK_CTRL = SAFE_RANGE, // Locking CTRL key
     LK_ALT, // Locking ALT key
 }; */
-#define KC_TTY C(A(KC_T))
+#define KC_TTY HYPR(KC_T)
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
