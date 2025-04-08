@@ -24,11 +24,7 @@ enum torn_layers { _QWERTY, _LOWER, _RAISE, _ADJUST };
 #define G_ENT LGUI_T(KC_ENT)
 #define L_SPC LT(_LOWER, KC_SPC)
 
-// TODO: Encoder keycodes
-/* enum custom_keycodes {
-    LK_CTRL = SAFE_RANGE, // Locking CTRL key
-    LK_ALT, // Locking ALT key
-}; */
+// Custom shortcut keys
 #define KC_TTY HYPR(KC_T)
 
 // clang-format off
@@ -76,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.    ,-----------------------------------------.
  * |      |  F1  |  F2  |  F3  |  F4  |  F5  |    |      |   &  |   *  |   (  |   )  |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- * |      |  F6  |  F7  |  F8  |  F9  |  F10 |    |      | Left | Down | Up   |Right |      |
+ * |      |  F6  |  F7  |  F8  |  F9  |  F10 |    | PScr | Left | Down | Up   |Right |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  * |      |  F11 |  F12 |      |      |      |    |      | Home | PgDn | PgUp | End  |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
@@ -86,37 +82,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_RAISE] = LAYOUT_split_3x6_4(
     _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,     _______, _______, _______, _______, _______, _______,
-    _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,    _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
+    _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,    KC_PSCR, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
     _______, KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,    _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______,
                       _______, _______, _______, _______,   _______, _______, _______, KC_MPLY
-),
-
-/* Adjust (Lower + Raise)
- * ,-----------------------------------------.    ,-----------------------------------------.
- * |      |      |      |      |      |      |    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- *               | ____ | Ctrl | Bksp | Del  |    |Enter |Space | Alt  | ____ |
- *               |      |      |Shift |Raise |    | Gui  |Lower |      |      |
- *               `---------------------------'    `---------------------------'
- */
-[_ADJUST] = LAYOUT_split_3x6_4(
-    _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______,
-                      _______, _______, _______, _______,   _______, _______, _______, _______
 )
 
 };
 
 const uint16_t PROGMEM encoder_keymaps[][2][2] = {
-    /* LAYER         LEFT CW       LEFT CCW           RIGHT CW       RIGHT CCW */
-    [_QWERTY] =  { { S(KC_RIGHT),  S(KC_LEFT)  },  { C(KC_Y),       C(KC_Z) } },
-    [_LOWER]  =  { { A(KC_TAB),    A(S(KC_TAB)) },  { KC_VOLU,       KC_VOLD } },
-    [_RAISE]  =  { { C(A(KC_RGHT)),C(A(KC_LEFT))},  { KC_MNXT,       KC_MPRV } },
-    [_ADJUST] =  { { _______,      _______      },  { _______,       _______ } },
+    /* LAYER         LEFT CW         LEFT CCW           RIGHT CW RIGHT CCW */
+    [_QWERTY] =  { { C(S(KC_RIGHT)), C(S(KC_LEFT))},  { C(KC_Y), C(KC_Z) } },
+    [_LOWER]  =  { { A(KC_TAB),      A(S(KC_TAB)) },  { _______, _______ } },
+    [_RAISE]  =  { { _______,        _______      },  { KC_VOLU, KC_VOLD } },
 };
 // clang-format on
