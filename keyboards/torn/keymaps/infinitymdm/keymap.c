@@ -16,16 +16,16 @@
 
 #include QMK_KEYBOARD_H
 
-enum torn_layers { _QWERTY, _LOWER, _RAISE, _ADJUST };
+enum torn_layers { _QWERTY, _LOWER, _RAISE};
 
-// Thumb keys for layer swapping
+// Shorthand for layer-tap thumb keys
 #define S_BSPC LSFT_T(KC_BSPC)
 #define R_DEL LT(_RAISE, KC_DEL)
 #define G_ENT LGUI_T(KC_ENT)
 #define L_SPC LT(_LOWER, KC_SPC)
 
 // Custom shortcut keys
-#define KC_TTY HYPR(KC_T)
+#define KC_TTY HYPR(KC_T) // map to open terminal in OS
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -37,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | `    |   A  |   S  |   D  |   F  |   G  |    |   H  |   J  |   K  |   L  |   ;  |  [   |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  * | \    |   Z  |   X  |   C  |   V  |   B  |    |   N  |   M  |   ,  |   .  |   /  |  ]   |
- * |------+------+------+------+------+------|    |------+------+------+------+------+------|
+ * '------+------+------+------+------+------|    |------+------+------+------+------+------'
  *               | tty  | Ctrl | Bksp | Del  |    |Enter |Space | Alt  | Caps |
  *               |      |      |Shift |Raise |    | Gui  |Lower |      | Lock |
  *               `---------------------------'    `---------------------------'
@@ -56,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | =    |   1  |   2  |   3  |   4  |   5  |    |   6  |   7  |   8  |   9  |   0  |  -   |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  * | _    |      |      |      |      |      |    |      |      |   ,  |   .  |   /  |  +   |
- * |------+------+------+------+------+------|    |------+------+------+------+------+------|
+ * '------+------+------+------+------+------|    |------+------+------+------+------+------'
  *               | ____ | Ctrl | Bksp | Del  |    |Enter |Space | Alt  | ____ |
  *               |      |      |Shift |Raise |    | Gui  |Lower |      |      |
  *               `---------------------------'    `---------------------------'
@@ -65,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESC,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
     KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_PMNS,
     KC_UNDS, _______, _______, _______, _______, _______,   _______, _______, KC_COMM, KC_DOT,  KC_SLSH, KC_PPLS,
-                      _______, _______, _______, _______,   _______, _______, _______, KC_MUTE
+                      QK_RBT , _______, _______, _______,   _______, _______, _______, KC_MUTE
 ),
 
 /* Raise
@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |  F6  |  F7  |  F8  |  F9  |  F10 |    | PScr | Left | Down | Up   |Right |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  * |      |  F11 |  F12 |      |      |      |    |      | Home | PgDn | PgUp | End  |      |
- * |------+------+------+------+------+------|    |------+------+------+------+------+------|
+ * '------+------+------+------+------+------|    |------+------+------+------+------+------'
  *               | ____ | Ctrl | Bksp | Del  |    |Enter |Space | Alt  | ____ |
  *               |      |      |Shift |Raise |    | Gui  |Lower |      |      |
  *               `---------------------------'    `---------------------------'
@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,     _______, _______, _______, _______, _______, _______,
     _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,    KC_PSCR, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
     _______, KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_F15,    _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______,
-                      _______, _______, _______, _______,   _______, _______, _______, KC_MPLY
+                      QK_BOOT, _______, _______, _______,   _______, _______, _______, KC_MPLY
 )
 
 };
@@ -95,4 +95,28 @@ const uint16_t PROGMEM encoder_keymaps[][2][2] = {
     [_LOWER]  =  { { A(KC_TAB),      A(S(KC_TAB)) },  { _______, _______ } },
     [_RAISE]  =  { { _______,        _______      },  { KC_VOLU, KC_VOLD } },
 };
+
+#ifdef OLED_ENABLE
+
+void oled_render_boot(bool bootloader) {
+    oled_clear();
+    for (int i = 0; i < 16; i++) {
+        oled_set_cursor(0, i);
+        if (bootloader) {
+            oled_write_P(PSTR("awaiting new FW... "), false);
+        } else {
+            oled_write_P(PSTR("rebooting"), false);
+        }
+    }
+
+    oled_render_dirty(true);
+}
+
+bool shutdown_user(bool jump_to_bootloader) {
+    oled_render_boot(jump_to_bootloader);
+    return true;
+}
+
+#endif
+
 // clang-format on
